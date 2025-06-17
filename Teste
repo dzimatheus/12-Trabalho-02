@@ -1,0 +1,91 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Teste {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Cliente cliente = null;
+        int opcao;
+        int numpedidos = 0;
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+
+        do{
+            System.out.println("Escolha uma opção:");
+            System.out.println("1-Cadastrar cliente:");
+            System.out.println("2-Exibir dados do cliente:");
+            System.out.println("3-Realizar pedido de carros ou motos:");
+            System.out.println("4-Listar todos os pedidos:");
+            System.out.println("0-Sair.");
+            opcao = sc.nextInt();
+            sc.nextLine();
+            switch(opcao){
+                case 1:
+                    System.out.println("Nome: ");
+                    String nome = sc.nextLine();
+                    System.out.println("Cpf: ");
+                    String cpf = sc.nextLine();
+                    cliente = new Cliente(nome, cpf);
+                    System.out.println("Você foi cadastrado!");
+                    break;
+                case 2:
+                    if(cliente != null){
+                        cliente.printDados();
+                    }else{
+                        System.out.println("Cadastre-se primeiro!");
+                    }
+                    break;
+                case 3:
+                    if(cliente == null){
+                        System.out.println("Cadastre-se primeiro!");
+                    }else{
+                        System.out.println("Quantos veículo quer pedir?");
+                        int qntd = sc.nextInt();
+                        sc.nextLine();
+                        for (int i = 0; i < qntd; i++){
+                            System.out.println("Deseja: 1-carro ou 2-moto?");
+                            int tipo = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Qual o modelo: ");
+                            String modelo = sc.nextLine();
+                            System.out.println("Qual o preço: ");
+                            double preco = sc.nextDouble();
+                            sc.nextLine();
+                            Veiculo veiculo;
+                            if(tipo == 1){
+                                System.out.println("Qual o ano: ");
+                                int ano = sc.nextInt();
+                                sc.nextLine();
+                                veiculo = new Carro(modelo, preco, ano);
+                            } else{
+                                System.out.println("Qual a km: ");
+                                double km = sc.nextDouble();
+                                sc.nextLine();
+                                veiculo = new Moto(modelo, preco, km);
+                            }
+                            Pedido pedido = new Pedido(numpedidos++, cliente, veiculo);
+                            pedidos.add(pedido);
+                            System.out.println("Pedido realizado!");
+                            pedido.printDados();
+                        }
+                    }
+                    break;
+                case 4:
+                    if(pedidos.isEmpty()){
+                        System.out.println("Nenhum pedido realizado ainda.");
+                    } else {
+                        for(Pedido p : pedidos){
+                            p.printDados();
+                            System.out.println("-------------------");
+                        }
+                    }
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }while(opcao != 0);
+        sc.close();
+    }
+}
